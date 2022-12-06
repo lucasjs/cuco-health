@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormSkeleton should render correctly 1`] = `
+<div>
+  <div
+    class="css-mydr2m"
+    data-testid="ch-form-skeleton"
+  >
+    <div
+      class="chakra-skeleton css-64jeh8"
+      data-testid="ch-form-skeleton-input"
+    />
+  </div>
+</div>
+`;
