@@ -60,13 +60,25 @@ const Clients = () => {
 
   const getClientsFromApi = useCallback(async (page: number) => {
     const response = await getClients(page, limit)
-    setTotalClients(Number(response?.headers['x-total-count']))
-    setClients(response?.data)
-    setLastPage(Math.round(Number(response?.headers['x-total-count']) / 5))
-    setTimeout(() => {
+
+    if (response?.status === 200) {
+      setTotalClients(Number(response?.headers['x-total-count']))
+      setClients(response?.data)
+      setLastPage(Math.round(Number(response?.headers['x-total-count']) / 5))
+      setTimeout(() => {
+        setIsLoaded(true)
+      }, 1000)
+    } else {
+      toast({
+        title: 'Algo deu errado. Tente novamente.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top'
+      })
       setIsLoaded(true)
-    }, 1000)
-  }, [])
+    }
+  }, [toast])
 
   React.useEffect(() => {
     getClientsFromApi(page)
@@ -318,7 +330,7 @@ const Clients = () => {
         </TableContainer>
       )}
 
-      {isLoaded && clients?.length === 0 && (
+      {isLoaded && clients && clients?.length === 0 && (
         <Alert status="warning">
           <AlertIcon />
           <AlertTitle>Nenhum usuário encontrado!</AlertTitle>
@@ -337,7 +349,7 @@ const Clients = () => {
         </Flex>
       )}
 
-      {isLoaded && clients?.length !== 0 && !resultsQuantity && (
+      {isLoaded && clients && clients?.length !== 0 && !resultsQuantity && (
         <Flex justifyContent="space-between" alignItems="flex-end" mt={5}>
           <div>
             <Text as="span" color="brand.text" fontSize="sm">
